@@ -1,37 +1,35 @@
-local base_fire_sound = RaycastWeaponBase._fire_sound
-
-function RaycastWeaponBase:_fire_sound()
-	if self:get_name_id() == "saw" or self:get_name_id() == "saw_secondary" or self:get_name_id() == "m134" or self:get_name_id() == "flamethrower_mk2" or self:get_name_id() == "mg42" then
-		base_fire_sound(self)
-	end
-end
-
--- Instead play the single fire noise here
-local old_fire = RaycastWeaponBase.fire
-function RaycastWeaponBase:fire(...)
-    local result = old_fire(self, ...)
-
-    -- Don't try playing the single fire sound with the saw; minigun = m134
-    if self:get_name_id() == "saw" or self:get_name_id() == "saw_secondary" or self:get_name_id() == "m134" or self:get_name_id() == "flamethrower_mk2" or self:get_name_id() == "mg42" then
-        return result
+-- Unless this weapon should follow standard logic...
+function RaycastWeaponBase:_soundfix_should_play_normal()
+    local name_id = self:get_name_id()
+	--conditions for firesounds to play in normal method:
+	--1.lacking a singlefire sound
+	--2.currently in gadget override such as underbarrel mode
+	--3.minigun has a single fire sound, but it's silent for some reason, so it needs a manual blacklist
+    if tweak_data.weapon[name_id].sounds.fire_single == nil or self:gadget_overrides_weapon_functions() or name_id == "m134" then
+        return true
     end
-
-    if result and not self:gadget_overrides_weapon_functions() then
-        self:play_tweak_data_sound("fire_single", "fire")
-	elseif self:gadget_overrides_weapon_functions() then
-		self:play_tweak_data_sound(self:fire_mode() == "auto" and "fire_auto" or "fire_single", "fire")
-	end
-    return result
+    return false
 end
+--previously blacklisted: "saw", "saw_secondary", "flamethrower_mk2", "mg42"
 
-function RaycastWeaponBase:play_tweak_data_sound(event, alternative_event)
-	local sounds = tweak_data.weapon[self._name_id].sounds
-	--overrides and uses vanilla method to determine "event" if using the little friend underbarrel mode
-	if self:gadget_overrides_weapon_functions() then
-	local event = self:_get_sound_event(event, alternative_event)
-		self:play_sound(event) --play sound method normally, as with underbarrel 
-	elseif event then
-		local event = (sounds and (sounds[event] or sounds[alternative_event])) --otherwise uses AFSF's singlefire override
-		self:play_sound(event)
-	end
+
+-- ...don't play a sound conventionally...
+local original_fire_sound = RaycastWeaponBase._fire_sound
+function RaycastWeaponBase:_fire_sound()
+    if self:_soundfix_should_play_normal() then
+        original_fire_sound(self)
+    end
+end
+ 
+-- ...and instead play the single fire noise here
+local original_fire = RaycastWeaponBase.fire
+function RaycastWeaponBase:fire(...)
+    local result = original_fire(self, ...)
+    
+    -- TODO?: Why should this have to check for result?
+    if not self:_soundfix_should_play_normal() and result then
+        self:play_tweak_data_sound("fire_single", "fire")
+    end
+ 
+    return result
 end
