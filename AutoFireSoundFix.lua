@@ -41,10 +41,7 @@ function RaycastWeaponBase:play_tweak_data_sound(event, alternative_event)
 	if self:gadget_overrides_weapon_functions() then
 	local event = self:_get_sound_event(event, alternative_event)
 		self:play_sound(event)
---		managers.game_play_central:announcer_say("g23") --lol
-
---		managers.player:local_player():sound():say(g43,true,true) --!
---		--managers.game_play_central:announcer_say("cpa_a02_01") --lol
+--		managers.game_play_central:announcer_say("g23") --scream "grenade" when using underbarrel
 	elseif event then
 		local event = (sounds and (sounds[event] or sounds[alternative_event])) --otherwise uses AFSF's singlefire override
 		self:play_sound(event)
