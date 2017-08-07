@@ -10,6 +10,12 @@
 			"hook_id" : "lib/units/weapons/raycastweaponbase",
 			"script_path" : "AutoFireSoundFix.lua"
 		}
+	],
+	"updates" : [
+		{
+			"revision" : 1,
+			"identifier" : "AFSF2"
+		}
 	]
 }
 
