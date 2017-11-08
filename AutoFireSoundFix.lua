@@ -4,8 +4,8 @@ function RaycastWeaponBase:_soundfix_should_play_normal()
 	--conditions for firesounds to play in normal method:
 	--1.lacking a singlefire sound
 	--2.currently in gadget override such as underbarrel mode
-	--3.minigun has a single fire sound, but it's silent for some reason, so it needs a manual blacklist
-    if tweak_data.weapon[name_id].sounds.fire_single == nil or self:gadget_overrides_weapon_functions() or name_id == "m134" then
+	--3.minigun and mg42 will have a silent fire sound if not blacklisted
+    if tweak_data.weapon[name_id].sounds.fire_single == nil or self:gadget_overrides_weapon_functions() or name_id == "m134" or name_id == "mg42" then
         return true
     end
     return false
