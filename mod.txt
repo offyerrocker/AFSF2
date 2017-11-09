@@ -3,7 +3,7 @@
 	"description" : "A fix of the duplicated sound when firing one bullet in auto mode",
 	"author" : "90e and DarKobalt, Llamageddon, and Offyerrocker",
 	"contact" : "/id/offyerrocker",
-	"version" : "1.3",
+	"version" : "1.4",
 	"priority" : 10,
 	"blt_version" : 2,
 	"image" : "afsf.png",
