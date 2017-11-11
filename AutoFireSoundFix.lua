@@ -5,7 +5,7 @@ function RaycastWeaponBase:_soundfix_should_play_normal()
 	--1.lacking a singlefire sound
 	--2.currently in gadget override such as underbarrel mode
 	--3.minigun and mg42 will have a silent fire sound if not blacklisted
-    if tweak_data.weapon[name_id].sounds.fire_single == nil or self:gadget_overrides_weapon_functions() or name_id == "m134" or name_id == "mg42" then
+    if tweak_data.weapon[name_id].sounds.fire_single == nil or self:gadget_overrides_weapon_functions() or name_id == "m134" or name_id == "mg42" or name_id == "saw" or name_id == "saw_secondary" then
         return true
     end
     return false
@@ -36,7 +36,9 @@ end
 --overkill's next_fire_allowed calculations cause duplicated fire noises for the saiga
 --so we bypass it, sort of
 function RaycastWeaponBase:start_shooting()
---		self:_fire_sound() --so don't play the fire sound here
+	if self:_soundfix_should_play_normal() then 
+		self:_fire_sound() --so don't play the fire sound here
+	end
 	self._next_fire_allowed = math.max(self._next_fire_allowed, self._unit:timer():time())
 	self._shooting = true
 end
@@ -49,7 +51,9 @@ function RaycastWeaponBase:trigger_pressed(...)
 		fired = self:fire(...)
 
 		if fired then
-			self:_fire_sound() -- play generic fire sound here instead of RaycastWeaponBase:start_shooting()
+			if not self:_soundfix_should_play_normal() then
+				self:_fire_sound() -- play generic fire sound here instead of RaycastWeaponBase:start_shooting()
+			end
 			self:update_next_shooting_time()
 		end
 	end
@@ -64,9 +68,11 @@ function RaycastWeaponBase:trigger_held(...)
 		fired = self:fire(...)
 		if fired then
 			self:update_next_shooting_time()
-			self:_fire_sound() --play generic fire sound here instead of RaycastWeaponBase:start_shooting()
+			if not self:_soundfix_should_play_normal() then 
+				self:_fire_sound() --play generic fire sound here instead of RaycastWeaponBase:start_shooting()
+			end
 		end
-	else
+	elseif not self:_soundfix_should_play_normal()
 		self:play_tweak_data_sound("stop_fire") --don't play another sound if you're not actually FIRING
 	end
 
