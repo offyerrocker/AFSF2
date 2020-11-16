@@ -1,12 +1,12 @@
 {
 	"name" : "Auto-Fire Sound Fix",
 	"description" : "A fix of the duplicated sound when firing one bullet in auto mode",
-	"author" : "90e and DarKobalt, Llamageddon, and Offyerrocker",
-	"contact" : "/id/offyerrocker",
-	"version" : "1.4",
+	"author" : "90e and DarKobalt, Llamageddon, DMC, and Offyerrocker",
+	"contact" : "Discord: Offyerrocker#3878",
+	"version" : "1.7",
 	"priority" : 10,
 	"blt_version" : 2,
-	"image" : "afsf.png",
+	"image" : "icon.png",
 	"color" : "178 135 42",
 	"hooks" : [
 		{   
@@ -20,6 +20,3 @@
 		}
 	]
 }
-
-
-
