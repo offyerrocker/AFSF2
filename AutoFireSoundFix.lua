@@ -73,8 +73,8 @@ end
 --Play sounds here instead for fix-applicable weapons; or else if blacklisted, use original function and don't play the fixed single-fire sound
 --U200: there goes AFSF2's compatibility with other mods
 Hooks:PreHook(RaycastWeaponBase,"fire","autofiresoundfix2_raycastweaponbase_fire",function(self,...)
-	self._bullets_fired = 0
 	if not self:_soundfix_should_play_normal() then
+		self._bullets_fired = 0
 		self:play_tweak_data_sound(self:weapon_tweak_data().sounds.fire_single,"fire_single")
 	end
 end)
