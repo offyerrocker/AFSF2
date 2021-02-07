@@ -15,7 +15,8 @@ _G.AutoFireSoundFixBlacklist = {
 	["m134"] = true,
 	["mg42"] = true,
 	["shuno"] = true,
-	["system"] = true
+	["system"] = true,
+	["par"] = true
 }
 
 --Allows users/modders to easily edit this blacklist from outside of this mod
@@ -54,6 +55,8 @@ function RaycastWeaponBase:_soundfix_should_play_normal()
 	elseif AutoFireSoundFixBlacklist[name_id] then
 		--blacklisted sound
 		return true
+--	elseif self:gadget_overrides_weapon_functions() then 
+--		return true
 	elseif not self:weapon_tweak_data().sounds.fire_single then
 		--no singlefire sound; should play normal
 		return true
